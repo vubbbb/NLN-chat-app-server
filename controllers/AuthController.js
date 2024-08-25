@@ -42,7 +42,6 @@ export const updateProfile = async (req, res, next) => {
 
 export const getUserInfo = async (req, res, next) => {
   try {
-    console.log("here");
     const userData = await User.findById(req.query.userID);
     console.log(req.query.userID);
     if (!userData) {
