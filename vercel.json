@@ -1,0 +1,23 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "index.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/index.js"
+      }
+    ],
+    "env": {
+      "PORT": "3000",
+      "JWT_SECRET": "messi is bester than ronaldo",
+      "DATABASE_URL": "mongodb+srv://vubinh69:1307@react-chat-app.p5hkp3i.mongodb.net/?retryWrites=true&w=majority&appName=react-chat-app",
+      "CLOUDINARY_CLOUD_NAME": "dkashxvw8",
+      "CLOUDINARY_API_KEY": "527489234333451",
+      "CLOUDINARY_API_SECRET": "-BkN346ZzvEyTZ3f1sVHKCIq0pU"
+    }
+  }
