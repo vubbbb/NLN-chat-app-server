@@ -1,17 +1,10 @@
 import { compare } from "bcrypt";
 import User from "../models/UserModel.js";
-import jwt from "jsonwebtoken";
 import { renameSync, unlinkSync } from "fs";
 import cloudinary from "../configs/cloudinary.js";
-import { send } from "process";
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
-// const createToken = (email, userID) => {
-//   return jwt.sign({ email, userID }, process.env.JWT_SECRET, {
-//     expiresIn: maxAge,
-//   });
-// };
 
 export const updateProfile = async (req, res, next) => {
   try {
