@@ -19,7 +19,7 @@ export const updateProfile = async (req, res, next) => {
     const firstName= req.query.firstName;
     const lastName= req.query.lastName;
     console.log(firstName, lastName);
-    if (!firstname || !lastname) {
+    if (!firstName || !lastName) {
       return res.status(400).send("First name and last name are required");
     }
     const userData = await User.findByIdAndUpdate(
