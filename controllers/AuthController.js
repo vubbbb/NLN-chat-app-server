@@ -8,10 +8,10 @@ const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 export const updateProfile = async (req, res, next) => {
   try {
-    const userID = req.query.userID;
+    const userID = req.body.params.userID;
     console.log(req);
-    const firstName= req.query.firstName;
-    const lastName= req.query.lastName;
+    const firstName= req.body.params.firstName;
+    const lastName= req.body.params.lastName;
     console.log(firstName, lastName);
     if (!firstName || !lastName) {
       return res.status(400).send("First name and last name are required");
