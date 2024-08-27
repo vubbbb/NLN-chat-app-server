@@ -7,7 +7,7 @@ import {
   addProfileImage,
   removeProfileImage,
 } from "../controllers/AuthController.js";
-import { verifyToken } from "../middlewares/AuthMiddleware.js";
+// import { verifyToken } from "../middlewares/AuthMiddleware.js";
 import multer from "multer";
 
 const authRoutes = Router();
