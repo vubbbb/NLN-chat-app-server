@@ -15,7 +15,7 @@ const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 export const updateProfile = async (req, res, next) => {
   try {
-    res.send("Hello");
+    console.log(req);
     const userID = req.query.userID;
     console.log(req);
     const { firstName, lastName } = req.headers;
