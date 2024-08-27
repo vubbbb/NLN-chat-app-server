@@ -3,6 +3,7 @@ import User from "../models/UserModel.js";
 import jwt from "jsonwebtoken";
 import { renameSync, unlinkSync } from "fs";
 import cloudinary from "../configs/cloudinary.js";
+import { send } from "process";
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
@@ -14,9 +15,10 @@ const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 export const updateProfile = async (req, res, next) => {
   try {
+    res.send("Hello");
     const userID = req.query.userID;
-    const { firstName, lastName } = req.data;
-    console.log(req.data);
+    console.log(req);
+    const { firstName, lastName } = req.headers;
     if (!firstName || !lastName) {
       return res.status(400).send("First name and last name are required");
     }
