@@ -15,16 +15,16 @@ const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 export const updateProfile = async (req, res, next) => {
   try {
-    console.log(req);
     const userID = req.query.userID;
-    console.log(req);
-    const { firstName, lastName } = req.headers;
-    if (!firstName || !lastName) {
+    const firstName= req.query.firstName;
+    const lastName= req.query.lastName;
+    console.log(firstName, lastName);
+    if (!firstname || !lastname) {
       return res.status(400).send("First name and last name are required");
     }
     const userData = await User.findByIdAndUpdate(
       userID,
-      { firstName, profileSetup: true }
+      { firstName, lastName, profileSetup: true }
     );
     console.log("here");
     return res.status(201).json({
