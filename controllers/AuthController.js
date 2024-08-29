@@ -136,10 +136,10 @@ export const addProfileImage = async (req, res) => {
   //   return res.status(201).json({
   //     image: updatedUser.image,
   //   });
-  // } catch (error) {
-  //   console.log(error);
-  //   return res.status(500).json("Internal server error");
-  // }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json("Internal server error");
+  }
 };
 
 export const removeProfileImage = async (req, res, next) => {
