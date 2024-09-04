@@ -121,7 +121,7 @@ export const addProfileImage = async (req, res) => {
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.query.userID,
-      { image: req.params.image },
+      { image: req.body.params.image },
     );
     return res.status(201).json({
       image: updatedUser.image,
