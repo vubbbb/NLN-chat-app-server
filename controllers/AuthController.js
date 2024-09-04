@@ -119,23 +119,22 @@ export const login = async (req, res, next) => {
 
 export const addProfileImage = async (req, res) => {
   try {
-    console.log(req)
-    // const result = await cloudinary.uploader.upload(req.file.path, {
-    //   folder: "profiles",
-    // });
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "profiles",
+    });
 
-    // // Xóa file tạm thời sau khi upload lên Cloudinary
-    // unlinkSync(req.file.path);
+    // Xóa file tạm thời sau khi upload lên Cloudinary
+    unlinkSync(req.file.path);
 
-    // const updatedUser = await User.findByIdAndUpdate(
-    //   req.query.userID,
-    //   { image: result.secure_url },
-    //   { new: true, runValidators: true }
-    // );
+    const updatedUser = await User.findByIdAndUpdate(
+      req.query.userID,
+      { image: result.secure_url },
+      { new: true, runValidators: true }
+    );
 
-    // return res.status(201).json({
-    //   image: updatedUser.image,
-    // });
+    return res.status(201).json({
+      image: updatedUser.image,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json("Internal server error");
