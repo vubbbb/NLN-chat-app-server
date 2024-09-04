@@ -119,20 +119,10 @@ export const login = async (req, res, next) => {
 
 export const addProfileImage = async (req, res) => {
   try {
-    console.log("req.file: ", req);
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "profiles",
-    });
-
-    // Xóa file tạm thời sau khi upload lên Cloudinary
-    unlinkSync(req.file.path);
-
     const updatedUser = await User.findByIdAndUpdate(
       req.query.userID,
-      { image: result.secure_url },
-      { new: true, runValidators: true }
+      { image: req.params.image },
     );
-
     return res.status(201).json({
       image: updatedUser.image,
     });
