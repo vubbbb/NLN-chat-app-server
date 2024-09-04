@@ -8,27 +8,26 @@ const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 export const updateProfile = async (req, res, next) => {
   try {
-    console.log(req.body);
-    // const userID = req.body.params.userID;
-    // const firstName= req.body.params.firstName;
-    // const lastName= req.body.params.lastName;
-    // if (!firstName || !lastName) {
-    //   return res.status(400).send("First name and last name are required");
-    // }
-    // const userData = await User.findByIdAndUpdate(
-    //   userID,
-    //   { firstName, lastName, profileSetup: true }
-    // );
-    // console.log("here");
-    // return res.status(201).json({
-    //   id: userData.id,
-    //   email: userData.email,
-    //   profileSetup: userData.profileSetup,
-    //   firstName: userData.firstName,
-    //   lastName: userData.lastName,
-    //   image: userData.image,
-    //   color: userData.color,
-    // });
+    const userID = req.query.userID;
+    const firstName= req.query.firstName;
+    const lastName= req.query.lastName;
+    if (!firstName || !lastName) {
+      return res.status(400).send("First name and last name are required");
+    }
+    const userData = await User.findByIdAndUpdate(
+      userID,
+      { firstName, lastName, profileSetup: true }
+    );
+    console.log("here");
+    return res.status(201).json({
+      id: userData.id,
+      email: userData.email,
+      profileSetup: userData.profileSetup,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      image: userData.image,
+      color: userData.color,
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json("Internal server error");
