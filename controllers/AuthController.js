@@ -119,6 +119,7 @@ export const login = async (req, res, next) => {
 
 export const addProfileImage = async (req, res) => {
   try {
+    console.log(req);
     const updatedUser = await User.findByIdAndUpdate(
       req.query.userID,
       { image: req.body.params.image },
