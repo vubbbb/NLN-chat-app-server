@@ -119,6 +119,8 @@ export const login = async (req, res, next) => {
 
 export const addProfileImage = async (req, res) => {
   try {
+    console.log("req.file: ", req.file);
+    console.log("req.query.userID: ", req.query.userID);
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: "profiles",
     });
