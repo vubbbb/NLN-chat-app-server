@@ -119,10 +119,11 @@ export const login = async (req, res, next) => {
 
 export const addProfileImage = async (req, res) => {
   try {
-    console.log(req);
+    const userID = req.body.params.userID;
+    const image = req.body.params.image;
     const updatedUser = await User.findByIdAndUpdate(
-      req.query.userID,
-      { image: req.body.params.image },
+      userID,
+      { image },
     );
     return res.status(201).json({
       image: updatedUser.image,
