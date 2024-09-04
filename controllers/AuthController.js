@@ -11,6 +11,7 @@ export const updateProfile = async (req, res, next) => {
     const userID = req.body.params.userID;
     const firstName= req.body.params.firstName;
     const lastName= req.body.params.lastName;
+    console.log(req.body.params);
     if (!firstName || !lastName) {
       return res.status(400).send("First name and last name are required");
     }
