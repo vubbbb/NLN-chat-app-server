@@ -7,37 +7,18 @@ const userSchema = new mongoose.Schema({
         required: [, "Email is required"],
         unique: true
     },
-    password:{
+    nickname:{
         type: String,
-        required: [true, "Password is required"],
+        required: [, "Nickname is required"],
+        unique: true
     },
-    firstName:{
-        type: String,
-        required: false
-    },
-    lastName:{
-        type: String,
-        required: false
-    },
-    image:{
-        type: String,
-        required: false
-    },
-    color:{
-        type: Number,
-        required: false
-    },
-    profileSetup:{
-        type: Boolean,
-        default: false
-    }
 });
 
-userSchema.pre('save', async function(next){
-    const salt = await genSalt();
-    this.password = await hash(this.password, salt);
-    next();
-});
+// userSchema.pre('save', async function(next){
+//     const salt = await genSalt();
+//     this.password = await hash(this.password, salt);
+//     next();
+// });
 
 const User = mongoose.model('User', userSchema);
 export default User;

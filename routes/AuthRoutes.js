@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
   signup,
-  login,
   getUserInfo,
   updateProfile,
   addProfileImage,
@@ -14,7 +13,6 @@ const authRoutes = Router();
 const upload = multer({ dest: '/tmp' });
 
 authRoutes.post("/signup", signup);
-authRoutes.post("/login", login);
 authRoutes.get("/user-info", getUserInfo);
 authRoutes.post("/update-profile", updateProfile);
 authRoutes.post(
