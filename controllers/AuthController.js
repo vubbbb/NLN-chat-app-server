@@ -8,18 +8,20 @@ const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 export const updateProfile = async (req, res, next) => {
   try {
-    const userEmail = req.body.params.email;
-    const nickname= req.body.params.nickname;
+    console.log(req.body);
+    const email = req.body.email;
+    const nickname = req.body.nickname;
+    console.log(email, nickname);
     const setupProfile = true;
     if (!nickname) {
       return res.status(400).send("First name and last name are required");
     }
     const userData = await User.findOneAndUpdate(
-      userEmail,
+      {email: email},
       { nickname, setupProfile },
+      { new: true }
     );
     return res.status(201).json({
-      id: userData.id,
       email: userData.email,
       nickname: userData.nickname,
     });
