@@ -6,7 +6,6 @@ import { set } from "mongoose";
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
-
 export const updateProfile = async (req, res, next) => {
   try {
     console.log(req.body);
@@ -18,7 +17,7 @@ export const updateProfile = async (req, res, next) => {
       return res.status(400).send("First name and last name are required");
     }
     const userData = await User.findOneAndUpdate(
-      {email: email},
+      { email: email },
       { nickname, setupProfile },
       { new: true }
     );
@@ -52,12 +51,12 @@ export const getUserInfo = async (req, res, next) => {
 
 export const signup = async (req, res, next) => {
   try {
-    const { email, nickname } = req.body;
+    const { email, nickname, setupProfile } = req.body;
     console.log(req.body);
     if (!email || !nickname) {
       return res.status(400).json("Email and nickname are required");
     }
-    const user = await User.create({ email, nickname });
+    const user = await User.create({ email, nickname, setupProfile });
     return res.status(201).json({
       user: {
         id: user.id,
@@ -112,10 +111,7 @@ export const addProfileImage = async (req, res) => {
   try {
     const userID = req.body.params.userID;
     const image = req.body.params.image;
-    const updatedUser = await User.findByIdAndUpdate(
-      userID,
-      { image },
-    );
+    const updatedUser = await User.findByIdAndUpdate(userID, { image });
     return res.status(201).json({
       image: updatedUser.image,
     });
