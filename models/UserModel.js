@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
         required: [, "Nickname is required"],
         unique: true
     },
+    setupProfile:{
+        type: Boolean,
+        default: false
+    },
 });
 
 // userSchema.pre('save', async function(next){
