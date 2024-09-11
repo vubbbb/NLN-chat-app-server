@@ -63,7 +63,7 @@ export const signup = async (req, res, next) => {
         id: user.id,
         email: user.email,
         nickname: user.nickname,
-        setupProfile: true,
+        setupProfile: user.setupProfile,
       },
     });
   } catch (error) {
