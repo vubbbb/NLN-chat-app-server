@@ -13,7 +13,7 @@ const authRoutes = Router();
 const upload = multer({ dest: '/tmp' });
 
 authRoutes.post("/signup", signup);
-authRoutes.get("/user-info", getUserInfo);
+authRoutes.post("/user-info", getUserInfo);
 authRoutes.post("/update-profile", updateProfile);
 authRoutes.post(
   "/add-profile-image",
