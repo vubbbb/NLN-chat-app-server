@@ -2,6 +2,7 @@ import { compare } from "bcrypt";
 import User from "../models/UserModel.js";
 import { renameSync, unlinkSync } from "fs";
 import cloudinary from "../configs/cloudinary.js";
+import { set } from "mongoose";
 
 const maxAge = 3 * 24 * 60 * 60 * 1000;
 
@@ -62,6 +63,7 @@ export const signup = async (req, res, next) => {
         id: user.id,
         email: user.email,
         nickname: user.nickname,
+        setupProfile: true,
       },
     });
   } catch (error) {
