@@ -33,7 +33,7 @@ export const updateProfile = async (req, res, next) => {
 
 export const getUserInfo = async (req, res, next) => {
   try {
-    const userData = await User.findOne({ email: req.body.email });
+    const userData = await User.findOne({ email: req.body.params.email });
     if (!userData) {
       return res.status(404).send("User not found");
     }
