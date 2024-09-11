@@ -33,8 +33,7 @@ export const updateProfile = async (req, res, next) => {
 
 export const getUserInfo = async (req, res, next) => {
   try {
-    const userData = await User.findById(req.query.userID);
-    console.log(req.query.userID);
+    const userData = await User.findOne({ email: req.body.email });
     if (!userData) {
       return res.status(404).send("User not found");
     }
@@ -42,6 +41,7 @@ export const getUserInfo = async (req, res, next) => {
       id: userData.id,
       email: userData.email,
       nickname: userData.nickname,
+      setupProfile: userData.setupProfile,
     });
   } catch (error) {
     console.log(error);
