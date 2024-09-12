@@ -27,7 +27,7 @@ const server = app.listen(port, () => {
   console.log(`Server is running on port http://localhost:${port}`);
 });
 
-socketSetup(server);
+// socketSetup(server);
 
 mongoose.connect(databaseURL).then(() => {
     console.log('Connected to the database');
