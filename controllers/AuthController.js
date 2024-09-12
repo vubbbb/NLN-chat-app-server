@@ -22,9 +22,12 @@ export const updateProfile = async (req, res, next) => {
       { new: true }
     );
     return res.status(201).json({
-      userID: userData.id,
-      email: userData.email,
-      nickname: userData.nickname,
+      user: {
+        userID: checkUser.id,
+        email: checkUser.email,
+        nickname: checkUser.nickname,
+        setupProfile: checkUser.setupProfile,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -39,10 +42,12 @@ export const getUserInfo = async (req, res, next) => {
       return res.status(404).send("User not found");
     }
     return res.status(201).json({
-      userID: userData.id,
-      email: userData.email,
-      nickname: userData.nickname,
-      setupProfile: userData.setupProfile,
+      user: {
+        userID: checkUser.id,
+        email: checkUser.email,
+        nickname: checkUser.nickname,
+        setupProfile: checkUser.setupProfile,
+      },
     });
   } catch (error) {
     console.log(error);
