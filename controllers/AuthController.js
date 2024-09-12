@@ -52,19 +52,30 @@ export const getUserInfo = async (req, res, next) => {
 export const signup = async (req, res, next) => {
   try {
     const { email, nickname, setupProfile } = req.body;
-    console.log(req.body);
-    if (!email || !nickname) {
-      return res.status(400).json("Email and nickname are required");
+    if (!email) {
+      return res.status(400).json("Email is required");
     }
-    const user = await User.create({ email, nickname, setupProfile });
-    return res.status(201).json({
-      user: {
-        id: user.id,
-        email: user.email,
-        nickname: user.nickname,
-        setupProfile: user.setupProfile,
-      },
-    });
+    const checkUser = await User.findOne({ email });
+    if (checkUser) {
+      return res.status(201).json({
+        user: {
+          id: checkUser.id,
+          email: checkUser.email,
+          nickname: checkUser.nickname,
+          setupProfile: checkUser.setupProfile,
+        },
+      });
+    } else {
+      const user = await User.create({ email, nickname, setupProfile });
+      return res.status(201).json({
+        user: {
+          id: user.id,
+          email: user.email,
+          nickname: user.nickname,
+          setupProfile: user.setupProfile,
+        },
+      });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json("Internal server error");
