@@ -22,6 +22,7 @@ export const updateProfile = async (req, res, next) => {
       { new: true }
     );
     return res.status(201).json({
+      userID: userData.id,
       email: userData.email,
       nickname: userData.nickname,
     });
@@ -38,7 +39,7 @@ export const getUserInfo = async (req, res, next) => {
       return res.status(404).send("User not found");
     }
     return res.status(201).json({
-      id: userData.id,
+      userID: userData.id,
       email: userData.email,
       nickname: userData.nickname,
       setupProfile: userData.setupProfile,
@@ -59,7 +60,7 @@ export const signup = async (req, res, next) => {
     if (checkUser) {
       return res.status(201).json({
         user: {
-          id: checkUser.id,
+          userID: checkUser.id,
           email: checkUser.email,
           nickname: checkUser.nickname,
           setupProfile: checkUser.setupProfile,
@@ -69,7 +70,7 @@ export const signup = async (req, res, next) => {
       const user = await User.create({ email, nickname, setupProfile });
       return res.status(201).json({
         user: {
-          id: user.id,
+          userID: user.id,
           email: user.email,
           nickname: user.nickname,
           setupProfile: user.setupProfile,
