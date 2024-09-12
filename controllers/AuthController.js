@@ -23,10 +23,10 @@ export const updateProfile = async (req, res, next) => {
     );
     return res.status(201).json({
       user: {
-        userID: checkUser.id,
-        email: checkUser.email,
-        nickname: checkUser.nickname,
-        setupProfile: checkUser.setupProfile,
+        userID: userData.id,
+        email: userData.email,
+        nickname: userData.nickname,
+        setupProfile: userData.setupProfile,
       },
     });
   } catch (error) {
@@ -43,10 +43,10 @@ export const getUserInfo = async (req, res, next) => {
     }
     return res.status(201).json({
       user: {
-        userID: checkUser.id,
-        email: checkUser.email,
-        nickname: checkUser.nickname,
-        setupProfile: checkUser.setupProfile,
+        userID: userData.id,
+        email: userData.email,
+        nickname: userData.nickname,
+        setupProfile: userData.setupProfile,
       },
     });
   } catch (error) {
