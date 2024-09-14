@@ -1,7 +1,7 @@
 import { Server as SocketIOServer } from "socket.io";
 
 const socketSetup = (server) => {
-  const io = SocketIOServer(server, {
+  const io = new SocketIOServer(server, {
     cors: {
       method: ["GET", "POST"],
     },
