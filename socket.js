@@ -3,7 +3,7 @@ import { Server as SocketIOServer } from "socket.io";
 const socketSetup = (server) => {
   const io = new SocketIOServer(server, {
     cors: {
-      method: ["GET", "POST"],
+      methods: ["GET", "POST"], // Đảm bảo từ methods đến methods
     },
   });
 
@@ -14,6 +14,7 @@ const socketSetup = (server) => {
     for (const [userID, socketID] of useSocketMap.entries()) {
       if (socketID === socket.id) {
         useSocketMap.delete(userID);
+        console.log(`UserID ${userID} removed from map`);
         break;
       }
     }
@@ -26,12 +27,17 @@ const socketSetup = (server) => {
       useSocketMap.set(userID, socket.id);
       console.log(`User connected: ${userID} with socket id: ${socket.id}`);
     } else {
-      console.log("userID not provided");
+      console.log("UserID not provided in handshake query");
     }
 
     socket.on("disconnect", () => {
       disconnect(socket);
     });
+  });
+
+  // Optional: handle error events
+  io.on("error", (err) => {
+    console.error("Socket.io error:", err);
   });
 };
 
