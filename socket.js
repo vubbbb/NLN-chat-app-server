@@ -4,6 +4,7 @@ const socketSetup = (server) => {
   const io = new SocketIOServer(server, {
     cors: {
       methods: ["GET", "POST"], // Đảm bảo từ methods đến methods
+      credentials: true,
     },
   });
 
