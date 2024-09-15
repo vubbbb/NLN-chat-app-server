@@ -24,8 +24,18 @@ const socketSetup = (server) => {
     const userID = socket.handshake.query.userID;
 
     if (userID) {
-      useSocketMap.set(userID, socket.id);
-      console.log(`User connected: ${userID} with socket id: ${socket.id}`);
+      // Kiểm tra nếu userID đã có kết nối
+      if (useSocketMap.has(userID)) {
+        console.log(
+          `UserID ${userID} is already connected with socket id: ${useSocketMap.get(
+            userID
+          )}`
+        );
+      } else {
+        // Nếu chưa có kết nối thì thêm mới
+        useSocketMap.set(userID, socket.id);
+        console.log(`User connected: ${userID} with socket id: ${socket.id}`);
+      }
     } else {
       console.log("UserID not provided in handshake query");
     }
