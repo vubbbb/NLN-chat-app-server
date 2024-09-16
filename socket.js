@@ -6,9 +6,9 @@ const socketSetup = (server) => {
       methods: ["GET", "POST"], // Đảm bảo từ methods đến methods
       credentials: true,
       origin: "*",
-      transports: ['websocket'],
     },
     allowEIO3: true,
+    transports: ["websocket"],
   });
 
   const useSocketMap = new Map();
@@ -37,9 +37,9 @@ const socketSetup = (server) => {
       //     )}`
       //   );
       // } else {
-        // Nếu chưa có kết nối thì thêm mới
-        useSocketMap.set(userID, socket.id);
-        console.log(`User connected: ${userID} with socket id: ${socket.id}`);
+      // Nếu chưa có kết nối thì thêm mới
+      useSocketMap.set(userID, socket.id);
+      console.log(`User connected: ${userID} with socket id: ${socket.id}`);
       // }
     } else {
       console.log("UserID not provided in handshake query");
