@@ -7,6 +7,7 @@ const socketSetup = (server) => {
       credentials: true,
       origin: "*",
     },
+    allowEIO3: true,
   });
 
   const useSocketMap = new Map();
