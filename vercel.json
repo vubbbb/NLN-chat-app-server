@@ -1,20 +1,28 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "index.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/index.js"
-      }
-    ],
-    "functions": {
-      "proxy.js": {
-        "runtime": "edge"
-      }
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "proxy.js",
+      "use": "@vercel/edge-functions"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/api/proxy",
+      "dest": "/proxy.js"
+    }
+  ],
+  "functions": {
+    "proxy.js": {
+      "runtime": "edge"
     }
   }
+}
