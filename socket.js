@@ -6,6 +6,7 @@ const socketSetup = (server) => {
       methods: ["GET", "POST"], // Đảm bảo từ methods đến methods
       credentials: true,
       origin: "*",
+      transports: ['websocket', 'polling'],
     },
     allowEIO3: true,
   });
