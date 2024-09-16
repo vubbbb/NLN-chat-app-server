@@ -19,6 +19,7 @@ const socketSetup = (server) => {
         useSocketMap.delete(userID);
         console.log(`UserID ${userID} removed from map`);
         break;
+        // hi
       }
     }
   };
