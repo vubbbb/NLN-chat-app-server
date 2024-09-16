@@ -5,7 +5,8 @@ const socketSetup = (server) => {
     cors: {
       origin: "*",
       methods: ["GET", "POST"],
-    }
+    },
+    transports: ["websocket", "polling"],
   });
 
   const useSocketMap = new Map();
