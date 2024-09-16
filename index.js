@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const databaseURL = process.env.DATABASE_URL;
+const databaseURL = "mongodb+srv://vubinh69:1307@react-chat-app.p5hkp3i.mongodb.net/?retryWrites=true&w=majority&appName=react-chat-app";
 
 app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
