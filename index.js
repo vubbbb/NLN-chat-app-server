@@ -14,6 +14,7 @@ const databaseURL = process.env.DATABASE_URL;
 
 app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    origin: '*',
 }));
 
 app.use('/uploads/profiles', express.static('uploads/profiles'));
