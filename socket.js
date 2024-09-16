@@ -8,7 +8,6 @@ const socketSetup = (server) => {
       origin: "*",
     },
     allowEIO3: true,
-    transports: ["websocket"],
   });
 
   const useSocketMap = new Map();
@@ -27,24 +26,14 @@ const socketSetup = (server) => {
 
   io.on("connection", (socket) => {
     console.log(`User connected:`);
-    // const userID = socket.handshake.query.userID;
+    const userID = socket.handshake.query.userID;
 
-    // if (userID) {
-    //   // Kiểm tra nếu userID đã có kết nối
-    //   // if (useSocketMap.has(userID)) {
-    //   //   console.log(
-    //   //     `UserID ${userID} is already connected with socket id: ${useSocketMap.get(
-    //   //       userID
-    //   //     )}`
-    //   //   );
-    //   // } else {
-    //   // Nếu chưa có kết nối thì thêm mới
-    //   useSocketMap.set(userID, socket.id);
-    //   console.log(`User connected: ${userID} with socket id: ${socket.id}`);
-    //   // }
-    // } else {
-    //   console.log("UserID not provided in handshake query");
-    // }
+    if (userID) {
+      useSocketMap.set(userID, socket.id);
+      console.log(`User connected: ${userID} with socket id: ${socket.id}`);
+    } else {
+      console.log("UserID not provided in handshake query");
+    }
 
     socket.on("disconnect", () => {
       disconnect(socket);
