@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { genSalt, hash } from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
     email:{
