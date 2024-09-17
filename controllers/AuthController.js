@@ -11,6 +11,7 @@ export const updateProfile = async (req, res, next) => {
     console.log(req.body);
     const email = req.body.email;
     const nickname = req.body.nickname;
+    const picture = req.body.picture;
     console.log(email, nickname);
     const setupProfile = true;
     if (!nickname) {
@@ -18,7 +19,7 @@ export const updateProfile = async (req, res, next) => {
     }
     const userData = await User.findOneAndUpdate(
       { email: email },
-      { nickname, setupProfile },
+      { nickname, setupProfile, picture },
       { new: true }
     );
     return res.status(201).json({
@@ -27,6 +28,7 @@ export const updateProfile = async (req, res, next) => {
         email: userData.email,
         nickname: userData.nickname,
         setupProfile: userData.setupProfile,
+        picture: userData.picture,
       },
     });
   } catch (error) {
