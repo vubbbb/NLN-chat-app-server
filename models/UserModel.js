@@ -15,6 +15,9 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    picture:{
+        type: String,
+    },
 });
 
 // userSchema.pre('save', async function(next){
