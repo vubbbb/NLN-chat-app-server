@@ -57,7 +57,7 @@ export const getUserInfo = async (req, res, next) => {
 
 export const signup = async (req, res, next) => {
   try {
-    const { email, nickname, setupProfile } = req.body;
+    const { email, nickname, setupProfile, picture } = req.body;
     if (!email) {
       return res.status(400).json("Email is required");
     }
@@ -69,6 +69,7 @@ export const signup = async (req, res, next) => {
           email: checkUser.email,
           nickname: checkUser.nickname,
           setupProfile: checkUser.setupProfile,
+          picture: checkUser.picture,
         },
       });
     } else {
@@ -79,6 +80,7 @@ export const signup = async (req, res, next) => {
           email: user.email,
           nickname: user.nickname,
           setupProfile: user.setupProfile,
+          picture: user.picture,
         },
       });
     }
@@ -123,7 +125,6 @@ export const signup = async (req, res, next) => {
 //     return res.status(500).json("Internal server error");
 //   }
 // };
-
 
 export const addProfileImage = async (req, res) => {
   console.log("hello");
