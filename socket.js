@@ -27,29 +27,36 @@ const socketSetup = (server) => {
 
   const sendMessage = async (message) => {
     console.log("sendMessage", message);
-    const senderSocketID = useSocketMap.get(message.sender);
-    const receiverSocketID = useSocketMap.get(message.receiver);
 
-    const createdMessage = await Message.create(message);
+    try {
+      // Tạo mới tin nhắn mà không sử dụng callback
+      const createdMessage = await Message.create(message);
 
-    const messageData = await Message.findById(createdMessage._id)
-      .populate("sender", "id email nickname")
-      .populate("receiver", "id email nickname");
+      // Tìm tin nhắn vừa tạo và populate thông tin người gửi và người nhận
+      const messageData = await Message.findById(createdMessage._id)
+        .populate("sender", "id email nickname")
+        .populate("receiver", "id email nickname");
 
+      const senderSocketID = useSocketMap.get(message.sender);
+      const receiverSocketID = useSocketMap.get(message.receiver);
 
-    if (receiverSocketID) {
-      io.to(receiverSocketID).emit("recieveMessage", messageData);
+      // Gửi tin nhắn đến người nhận và người gửi nếu họ có kết nối
+      if (receiverSocketID) {
+        io.to(receiverSocketID).emit("recieveMessage", messageData);
+      }
+      if (senderSocketID) {
+        io.to(senderSocketID).emit("recieveMessage", messageData);
+      }
+
+    } catch (error) {
+      console.error("Error sending message:", error);
     }
-    if (senderSocketID) {
-      io.to(senderSocketID).emit("recieveMessage", messageData);
-    }
-
   };
 
   // socket.on
 
   io.on("connection", (socket) => {
-    console.log(`User connected:`);
+    console.log(`User connected: ${socket.id}`);
     const userID = socket.handshake.query.userID;
 
     if (userID) {
