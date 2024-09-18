@@ -26,6 +26,7 @@ const socketSetup = (server) => {
   };
 
   const sendMessage = async (message) => {
+    console.log("sendMessage", message);
     const senderSocketID = useSocketMap.get(message.sender);
     const receiverSocketID = useSocketMap.get(message.receiver);
 
