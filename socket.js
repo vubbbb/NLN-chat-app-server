@@ -26,8 +26,27 @@ const socketSetup = (server) => {
   };
 
   const sendMessage = async (message) => {
-    console.log("sendMessage", message);
+    console.log("Message:", message);
+    if (
+      !message.sender ||
+      !message.receiver ||
+      !message.content ||
+      !message.messageType
+    ) {
+      console.log(
+        "Missing required fields: sender, receiver, content, or messageType"
+      );
+    }
 
+    // Tạo đối tượng tin nhắn
+    const messageDataFromClient = {
+      sender: message.sender,
+      receiver: message.receiver,
+      messageType: message.messageType,
+      content: message.messageType === "text" ? message.content : undefined,
+      fileURL: message.messageType !== "text" ? message.fileURL : undefined,
+    };
+    console.log("Message data from client:", messageDataFromClient);
     try {
       // Tạo mới tin nhắn mà không sử dụng callback
       const createdMessage = await Message.create(message);
@@ -46,7 +65,6 @@ const socketSetup = (server) => {
       if (senderSocketID) {
         io.to(senderSocketID).emit("recieveMessage", messageData);
       }
-
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -65,7 +83,9 @@ const socketSetup = (server) => {
       console.log("UserID not provided in handshake query");
     }
 
-    socket.on("sendMessage", message =>  {sendMessage(message)});
+    socket.on("sendMessage", (message) => {
+      sendMessage(message);
+    });
 
     socket.on("disconnect", () => {
       disconnect(socket);
