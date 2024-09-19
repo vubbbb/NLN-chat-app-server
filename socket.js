@@ -36,7 +36,6 @@ const socketSetup = (server) => {
       const messageData = await Message.findById(createdMessage._id)
         .populate("sender", "id email nickname")
         .populate("receiver", "id email nickname");
-
       const senderSocketID = useSocketMap.get(message.sender);
       const receiverSocketID = useSocketMap.get(message.receiver);
 
@@ -66,7 +65,7 @@ const socketSetup = (server) => {
       console.log("UserID not provided in handshake query");
     }
 
-    socket.on("sendMessage", sendMessage);
+    socket.on("sendMessage", message =>  {sendMessage(message)});
 
     socket.on("disconnect", () => {
       disconnect(socket);
