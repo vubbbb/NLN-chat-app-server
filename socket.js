@@ -70,6 +70,10 @@ const socketSetup = (server) => {
     socket.on("disconnect", () => {
       disconnect(socket);
     });
+
+    setTimeout(function () {
+      socket.emit("recieveMessage", "Sent an event from the client!");
+    }, 3000);
   });
 
   // Optional: handle error events
