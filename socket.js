@@ -16,10 +16,10 @@ const socketSetup = (server) => {
 
   const disconnect = (socket) => {
     console.log(`User disconnected: ${socket.id}`);
-    for (const [userID, socketID] of useSocketMap.entries()) {
+    for (const socketID of useSocketMap.entries()) {
       if (socketID === socket.id) {
-        useSocketMap.delete(userID);
-        console.log(`UserID ${userID} removed from map`);
+        useSocketMap.delete(socketID);
+        console.log(`${socketID} removed from map`);
         break;
       }
     }
@@ -60,15 +60,8 @@ const socketSetup = (server) => {
   // socket.on
 
   io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
-    const userID = socket.handshake.query.userID;
-
-    if (userID) {
-      useSocketMap.set(userID, socket.id);
-      console.log(`User connected: ${userID} with socket id: ${socket.id}`);
-    } else {
-      console.log("UserID not provided in handshake query");
-    }
+    console.log(`Someone connected with socketID: ${socket.id}`);
+    useSocketMap.set(socket.id);
 
     socket.on("sendMessage", (message) => {
       sendMessage(message);
