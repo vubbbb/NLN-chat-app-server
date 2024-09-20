@@ -26,18 +26,6 @@ const socketSetup = (server) => {
   };
 
   const sendMessage = async (message) => {
-    console.log("Message:", message);
-    if (
-      !message.sender ||
-      !message.receiver ||
-      !message.content ||
-      !message.messageType
-    ) {
-      console.log(
-        "Missing required fields: sender, receiver, content, or messageType"
-      );
-    }
-
     // Tạo đối tượng tin nhắn
     const messageDataFromClient = {
       sender: message.sender,
@@ -46,10 +34,9 @@ const socketSetup = (server) => {
       content: message.messageType === "text" ? message.content : undefined,
       fileURL: message.messageType !== "text" ? message.fileURL : undefined,
     };
-    console.log("Message data from client:", messageDataFromClient);
     try {
       // Tạo mới tin nhắn mà không sử dụng callback
-      const createdMessage = await Message.create(message);
+      const createdMessage = await Message.create(messageDataFromClient);
 
       // Tìm tin nhắn vừa tạo và populate thông tin người gửi và người nhận
       const messageData = await Message.findById(createdMessage._id)
