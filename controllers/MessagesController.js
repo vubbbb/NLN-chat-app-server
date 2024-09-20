@@ -3,7 +3,7 @@ import Message from "../models/MessageModel.js";
 export const getMessages = async (req, res, next) => {
     console.log( req.body)
     try {
-        const { user1, user2 } = req.body;
+        const { user1, user2 } = req.query;
 
         if (user1 === undefined || user2 === undefined) {
             return res.status(400).json("User1 and User2 are required");
