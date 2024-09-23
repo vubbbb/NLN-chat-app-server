@@ -58,6 +58,7 @@ const socketSetup = (server) => {
     // Khi người dùng kết nối, truyền userID từ client để lưu trữ
     socket.on("register", (userID) => {
       userSocketMap.set(userID, socket.id);
+      // In ra thông báo kết nối thành công
       console.log(`User ${userID} connected with socketID: ${socket.id}`);
     });
 
