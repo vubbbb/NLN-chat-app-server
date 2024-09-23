@@ -10,23 +10,10 @@ const socketSetup = (server) => {
     transports: ["websocket", "polling"],
   });
 
-  const useSocketMap = new Map();
+  const userSocketMap = new Map(); // Map để lưu trữ userID => socketID
 
-  // define function
-
-  const disconnect = (socket) => {
-    console.log(`User disconnected: ${socket.id}`);
-    for (const socketID of useSocketMap.entries()) {
-      if (socketID === socket.id) {
-        useSocketMap.delete(socketID);
-        console.log(`${socketID} removed from map`);
-        break;
-      }
-    }
-  };
-
+  // Hàm gửi tin nhắn
   const sendMessage = async (message) => {
-    // Tạo đối tượng tin nhắn
     const messageDataFromClient = {
       sender: message.sender,
       receiver: message.receiver,
@@ -34,46 +21,63 @@ const socketSetup = (server) => {
       content: message.messageType === "text" ? message.content : undefined,
       fileURL: message.messageType !== "text" ? message.fileURL : undefined,
     };
+
     try {
-      // Tạo mới tin nhắn mà không sử dụng callback
+      // Tạo và lưu tin nhắn vào database
       const createdMessage = await Message.create(messageDataFromClient);
 
-      // Tìm tin nhắn vừa tạo và populate thông tin người gửi và người nhận
+      // Lấy tin nhắn vừa tạo với thông tin của người gửi và người nhận
       const messageData = await Message.findById(createdMessage._id)
         .populate("sender", "id email nickname")
         .populate("receiver", "id email nickname");
-      const senderSocketID = useSocketMap.get(message.sender);
-      const receiverSocketID = useSocketMap.get(message.receiver);
 
-      // Gửi tin nhắn đến người nhận và người gửi nếu họ có kết nối
+      // Lấy socketID của người nhận
+      const receiverSocketID = userSocketMap.get(message.receiver);
+
+      // Nếu người nhận đang kết nối, gửi tin nhắn cho họ
       if (receiverSocketID) {
         io.to(receiverSocketID).emit("recieveMessage", messageData);
+        console.log(`Message sent to receiver ${message.receiver}`);
       }
+
+      // Đồng thời gửi tin nhắn lại cho người gửi để cập nhật giao diện
+      const senderSocketID = userSocketMap.get(message.sender);
       if (senderSocketID) {
         io.to(senderSocketID).emit("recieveMessage", messageData);
+        console.log(`Message sent back to sender ${message.sender}`);
       }
     } catch (error) {
       console.error("Error sending message:", error);
     }
   };
 
-  // socket.on
-
+  // Xử lý khi có kết nối mới
   io.on("connection", (socket) => {
-    console.log(`Someone connected with socketID: ${socket.id}`);
-    useSocketMap.set(socket.id);
+    console.log(`User connected with socketID: ${socket.id}`);
 
-    socket.on("sendMessage", (message) => {
-      sendMessage(message);
-      socket.emit("recieveMessage", message);
+    // Khi người dùng kết nối, truyền userID từ client để lưu trữ
+    socket.on("register", (userID) => {
+      userSocketMap.set(userID, socket.id);
+      console.log(`User ${userID} connected with socketID: ${socket.id}`);
     });
 
+    // Xử lý sự kiện gửi tin nhắn từ client
+    socket.on("sendMessage", (message) => {
+      sendMessage(message);
+    });
+
+    // Xử lý ngắt kết nối
     socket.on("disconnect", () => {
-      disconnect(socket);
+      for (const [userID, socketID] of userSocketMap.entries()) {
+        if (socketID === socket.id) {
+          userSocketMap.delete(userID);
+          console.log(`User ${userID} disconnected and removed from map`);
+          break;
+        }
+      }
     });
   });
 
-  // Optional: handle error events
   io.on("error", (err) => {
     console.error("Socket.io error:", err);
   });
