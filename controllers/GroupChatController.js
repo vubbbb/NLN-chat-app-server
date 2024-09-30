@@ -5,7 +5,6 @@ export const createGroupChat = async (req, res) => {
   try {
     const { name, members } = req.body;
     const userID = req.body.userID;
-    console.log("userID", userID);
 
     const admin = await User.findById(userID);
 
@@ -24,6 +23,7 @@ export const createGroupChat = async (req, res) => {
       admin: userID,
     });
     await groupChat.save();
+    console.log("Group chat created");
     return res.status(201).json({groupChat});
   } catch (error) {
     console.error("Error creating group chat:", error);
