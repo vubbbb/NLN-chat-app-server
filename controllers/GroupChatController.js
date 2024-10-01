@@ -33,9 +33,8 @@ export const createGroupChat = async (req, res) => {
 
 export const getUserGroupChats = async (req, res) => {
   try {
-    console.log("Getting user group chats: ", req.body.params);
     const userID = req.body.params.userID;
-    console.log("userID", userID);
+    console.log("Getting user group chats for user:", userID); 
     const groupChats = await GroupChat.find({
       $or: [{ admin: userID }, { members: userID }],
     }).sort({ updateAt: -1 });

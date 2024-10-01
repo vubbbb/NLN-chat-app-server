@@ -4,7 +4,7 @@ import { createGroupChat, getUserGroupChats } from "../controllers/GroupChatCont
 const groupChatRoutes = Router();
 
 groupChatRoutes.post("/create-group-chat", createGroupChat);
-groupChatRoutes.get("/get-user-group-chats", getUserGroupChats);
+groupChatRoutes.post("/get-user-group-chats", getUserGroupChats);
 
 
 export default groupChatRoutes;
