@@ -33,7 +33,7 @@ export const createGroupChat = async (req, res) => {
 
 export const getUserGroupChats = async (req, res) => {
   try {
-    const userID = req.body.userID;
+    const userID = req.body.params.userID;
     console.log("userID", userID);
     const groupChats = await GroupChat.find({
       $or: [{ admin: userID }, { members: userID }],
