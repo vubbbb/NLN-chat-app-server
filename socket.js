@@ -1,5 +1,6 @@
 import { Server as SocketIOServer } from "socket.io";
 import Message from "./models/MessageModel.js";
+import GroupChat from "./models/GroupChatModel.js";
 
 const socketSetup = (server) => {
   const io = new SocketIOServer(server, {
@@ -51,6 +52,41 @@ const socketSetup = (server) => {
     }
   };
 
+  const sendGroupMessage = async (message) => {
+    const { sender, messageType, content, fileURL, groupID } = message;
+
+    const createdMessage = await Message.create({
+      sender,
+      receiver: null,
+      messageType,
+      content,
+      fileURL,
+      timestamp: new Date(),
+    });
+
+    const messageData = await Message.findById(createdMessage._id)
+      .populate("sender", "id email nickname")
+      .exec();
+
+    await GroupChat.findByIdAndUpdate(groupID, {
+      $push: { messages: createdMessage._id },
+    });
+
+    const group = await GroupChat.findById(groupID).populate("members");
+
+    const finalData = { ...messageData._doc, groupID: group._id };
+
+    if (group && group.members) {
+      group.members.forEach((member) => {
+        const memberSocketID = userSocketMap.get(member._id);
+        if (memberSocketID) {
+          io.to(memberSocketID).emit("receive_group_message", finalData);
+          console.log(`Group message sent to member ${member._id}`);
+        }
+      });
+    }
+  };
+
   // Xử lý khi có kết nối mới
   io.on("connection", (socket) => {
     console.log(`User connected with socketID: ${socket.id}`);
@@ -60,6 +96,10 @@ const socketSetup = (server) => {
       userSocketMap.set(userID, socket.id);
       // In ra thông báo kết nối thành công
       console.log(`User ${userID} connected with socketID: ${socket.id}`);
+    });
+
+    socket.on("send_group_message", (message) => {
+      sendGroupMessage(message);
     });
 
     // Xử lý sự kiện gửi tin nhắn từ client
