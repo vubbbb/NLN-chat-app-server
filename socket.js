@@ -23,6 +23,8 @@ const socketSetup = (server) => {
       fileURL: message.messageType !== "text" ? message.fileURL : undefined,
     };
 
+
+
     try {
       // Tạo và lưu tin nhắn vào database
       const createdMessage = await Message.create(messageDataFromClient);
@@ -73,6 +75,8 @@ const socketSetup = (server) => {
     });
 
     const group = await GroupChat.findById(groupID).populate("members");
+
+    console.log("Group data:", group);
 
     const finalData = { ...messageData._doc, groupID: group._id };
 
