@@ -44,3 +44,30 @@ export const getUserGroupChats = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getAllMessagesFromGroup = async (req, res) => {
+  try {
+    const groupId = req.body.params.groupID;
+    console.log("Getting messages from group:", groupId);
+    // Tìm nhóm chat theo groupId
+    const groupChat = await GroupChat.findById(groupId)
+      .populate({
+        path: "messages",
+        populate: {
+          path: "sender",
+          select: "id email nickname", // Chọn các trường cần thiết từ người gửi
+        },
+      })
+      .exec();
+
+    if (!groupChat) {
+      throw new Error("Group not found");
+    }
+
+    // Trả về danh sách các tin nhắn trong nhóm
+    return res.status(200).json({ messages: groupChat.messages });
+  } catch (error) {
+    console.error("Error getting messages from group:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
