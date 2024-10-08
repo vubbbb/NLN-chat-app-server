@@ -55,7 +55,8 @@ const socketSetup = (server) => {
   };
 
   const sendGroupMessage = async (message) => {
-    const { sender, messageType, content, fileURL, groupID } = message;
+    const { sender, messageType, content, groupID } = message;
+    const fileURL = message.messageType !== "text" ? message.fileURL : undefined;
 
     const createdMessage = await Message.create({
       sender,
@@ -76,13 +77,12 @@ const socketSetup = (server) => {
 
     const group = await GroupChat.findById(groupID).populate("members");
 
-    console.log("Group data:", group);
 
     const finalData = { ...messageData._doc, groupID: group._id };
 
     if (group && group.members) {
       group.members.forEach((member) => {
-        const memberSocketID = userSocketMap.get(member._id);
+        const memberSocketID = userSocketMap.get(member._id.toString());
         if (memberSocketID) {
           io.to(memberSocketID).emit("receive_group_message", finalData);
           console.log(`Group message sent to member ${member._id}`);
@@ -97,6 +97,9 @@ const socketSetup = (server) => {
 
     // Khi người dùng kết nối, truyền userID từ client để lưu trữ
     socket.on("register", (userID) => {
+      if (typeof userID === "object" && userID !== null && userID.data) {
+        userID = userID.data; // Gán lại giá trị của userID từ object
+      }
       userSocketMap.set(userID, socket.id);
       // In ra thông báo kết nối thành công
       console.log(`User ${userID} connected with socketID: ${socket.id}`);
