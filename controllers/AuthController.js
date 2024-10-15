@@ -129,7 +129,6 @@ export const signup = async (req, res, next) => {
 // };
 
 export const addProfileImage = async (req, res) => {
-  console.log("hello");
   try {
     const userID = req.body.params.userID;
     const image = req.body.params.image;

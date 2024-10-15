@@ -28,7 +28,6 @@ const socketSetup = (server) => {
     try {
       // Tạo và lưu tin nhắn vào database
       const createdMessage = await Message.create(messageDataFromClient);
-
       // Lấy tin nhắn vừa tạo với thông tin của người gửi và người nhận
       const messageData = await Message.findById(createdMessage._id)
         .populate("sender", "id email nickname")
@@ -53,6 +52,8 @@ const socketSetup = (server) => {
       console.error("Error sending message:", error);
     }
   };
+
+  
 
   const sendGroupMessage = async (message) => {
     const { sender, messageType, content, groupID } = message;
@@ -130,5 +131,6 @@ const socketSetup = (server) => {
     console.error("Socket.io error:", err);
   });
 };
+
 
 export default socketSetup;
