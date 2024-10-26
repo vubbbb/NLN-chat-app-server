@@ -23,8 +23,6 @@ const socketSetup = (server) => {
       fileURL: message.messageType !== "text" ? message.fileURL : undefined,
     };
 
-
-
     try {
       // Tạo và lưu tin nhắn vào database
       const createdMessage = await Message.create(messageDataFromClient);
@@ -53,42 +51,53 @@ const socketSetup = (server) => {
     }
   };
 
-  
-
   const sendGroupMessage = async (message) => {
-    const { sender, messageType, content, groupID } = message;
-    const fileURL = message.messageType !== "text" ? message.fileURL : undefined;
+    try {
+      const { sender, messageType, content, groupID } = message;
+      const fileURL = messageType !== "text" ? message.fileURL : undefined;
 
-    const createdMessage = await Message.create({
-      sender,
-      receiver: null,
-      messageType,
-      content,
-      fileURL,
-      timestamp: new Date(),
-    });
+      // Tạo và lưu tin nhắn vào database
+      const createdMessage = await Message.create({
+        sender,
+        receiver: null,
+        messageType,
+        content,
+        fileURL,
+        timestamp: new Date(),
+      });
 
-    const messageData = await Message.findById(createdMessage._id)
-      .populate("sender", "id email nickname")
-      .exec();
+      const messageData = await Message.findById(createdMessage._id)
+        .populate("sender", "id email nickname")
+        .exec();
 
-    await GroupChat.findByIdAndUpdate(groupID, {
-      $push: { messages: createdMessage._id },
-    });
+      // Cập nhật tin nhắn trong group
+      const group = await GroupChat.findByIdAndUpdate(
+        groupID,
+        { $push: { messages: createdMessage._id } },
+        { new: true }
+      ).populate("members");
 
-    const group = await GroupChat.findById(groupID).populate("members");
+      // Kiểm tra nếu group hoặc members không tồn tại
+      if (!group || !group.members) {
+        console.error(`Group or members not found for groupID: ${groupID}`);
+        return;
+      }
 
+      // Chuẩn bị dữ liệu cuối cùng để gửi
+      const finalData = { ...messageData._doc, groupID: group._id };
 
-    const finalData = { ...messageData._doc, groupID: group._id };
-
-    if (group && group.members) {
+      // Gửi tin nhắn đến từng thành viên trong nhóm, ngoại trừ người gửi
       group.members.forEach((member) => {
-        const memberSocketID = userSocketMap.get(member._id.toString());
-        if (memberSocketID) {
-          io.to(memberSocketID).emit("receive_group_message", finalData);
-          console.log(`Group message sent to member ${member._id}`);
+        if (member._id.toString() !== sender.toString()) {
+          const memberSocketID = userSocketMap.get(member._id.toString());
+          if (memberSocketID) {
+            io.to(memberSocketID).emit("receive_group_message", finalData);
+            console.log(`Group message sent to member ${member._id}`);
+          }
         }
       });
+    } catch (error) {
+      console.error("Error sending group message:", error);
     }
   };
 
@@ -131,6 +140,5 @@ const socketSetup = (server) => {
     console.error("Socket.io error:", err);
   });
 };
-
 
 export default socketSetup;
